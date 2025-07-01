@@ -22,6 +22,6 @@ app.use(cors(corsOption))
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, ()=>{
-    connectDB()
+    connectDB();
     console.log(`Server running at port ${PORT}`);
 })
