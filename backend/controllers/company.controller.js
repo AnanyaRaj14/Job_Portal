@@ -3,6 +3,8 @@ import { Company } from "../models/company.model.js";
 export const registerCompany = async (req, res) => {
     try {
         const { companyName } = req.body;
+        console.log(companyName);
+        
         if (!companyName) {
             return res.status(400).json({
                 message: "Company name is required.",
@@ -31,7 +33,7 @@ export const registerCompany = async (req, res) => {
     }
 }
 
-// get all companies
+// get company by logged in userId
 export const getCompany =  async (req, res) => {
     try {
         const userId = req.id; //logged in user id
@@ -48,13 +50,17 @@ export const getCompany =  async (req, res) => {
         })
     } catch (error) {
         console.log(error);
+         res.status(500).json({
+            message: "Server error",
+            success: false
+        });
     }
 }
 
 // get company by ID
 export const getCompanyById = async (req, res) => {
     try {
-       const companyId =  req.params.id;
+       const companyId = req.params.id;
        const company = await Company.findById(companyId);
        if(!company){
             return res.status(404).json({
