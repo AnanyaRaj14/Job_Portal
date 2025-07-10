@@ -1,4 +1,6 @@
 import { Job } from "../models/job.model.js";
+
+// post new jobs (admin can post)
 export const postJob = async (req, res) => {
     try {
         const {title, description, requirements, salary, location, jobType, experience, position, companyId} = req.body;
@@ -6,7 +8,7 @@ export const postJob = async (req, res) => {
 
         if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
             return res.status(400).json({
-                message: "Somethin is missing.",
+                message: "Something is missing.",
                 success: false
             })
         };
@@ -35,14 +37,14 @@ export const postJob = async (req, res) => {
     }
 }
 
-// to get all the jobs
+// to get all the jobs (for student)
 export const getAllJobs = async (req, res) => {
     try {
         const keyword = req.query.keyword || "";
         const query = {
             $or: [
-                { title: { $regex: keyword, $options: "i" } },
-                { description: { $regex: keyword, $options: "i" } },
+                {title:{ $regex: keyword, $options: "i"}},
+                {description:{ $regex: keyword, $options: "i"}},
             ]
         };
         const jobs = await Job.find(query).populate({
@@ -63,12 +65,12 @@ export const getAllJobs = async (req, res) => {
     }
 }
 
-// get job by id
+// get job by id (for student)
 export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
         const job = await Job.findById(jobId).populate({
-            path:"applications"
+            path:"application"
         });
         if (!job) {
             return res.status(404).json({
@@ -82,7 +84,7 @@ export const getJobById = async (req, res) => {
     }
 }
 
-// total job created by admin
+// total job created by admin (used by admin)
 export const getAdminJobs = async (req, res) => {
     try {
         const adminId = req.id;
