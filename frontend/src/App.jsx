@@ -1,7 +1,4 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import Navbar from './components/shared/Navbar'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
@@ -24,7 +21,6 @@ const appRouter = createBrowserRouter([
 ])
 
 function App() {
-  // const [count, setCount] = useState(0)
 
   return (
     <>
