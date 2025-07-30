@@ -53,12 +53,12 @@ const Profile = () => {
                         isResume ? <a target='_blank' href='https://youtube.com/@chaiaurcode' className='text-blue-600 w-full hover:underline cursor-pointer'>Chai Aur Code</a> : <span>NA</span>
                     }
                 </div>
-                <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
+            </div>
+            <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
                     <h1  className='text-xl font-bold p-5'>Applied Jobs</h1>
-                    {/* Application Table */}
+                    {/*  Total No. of Application Table */}
                     <AppliedJobTable />
                 </div>
-            </div>
         </div>
     )
 }
