@@ -4,14 +4,16 @@ import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Loader2 } from 'lucide-react'
-import { useSelector } from 'react-redux'
-import { setLoading } from '@/redux/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading, setUser } from '@/redux/authSlice'
 import axios from 'axios'
+import { USER_API_END_POINT } from '@/utils/constant'
+import { toast } from 'sonner'
 
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
 
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const { user } = useSelector(store => store.auth);
     const [input, setInput] = useState({
         fullname: user?.fullname,
@@ -22,6 +24,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         file: user?.profile?.resume,
     });
 
+    const dispatch = useDispatch()
+
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
@@ -30,24 +34,49 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         const file = e.target.files?.[0];
         setInput({ ...input, file });
     }
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        FormData.append("fullname", input.fullname);
-        FormData.append("email", input.email);
-        FormData.append("phoneNumber", input.phoneNumber);
-        FormData.append("bio", input.bio);
-        FormData.append("skills", input.skills);
-        if(input.file){
-            formData.append("file", input.file);
-        }
-        try {
-           const res = await axios 
-        } catch (error) {
-            
-        }
-        console.log(input);
+
+const submitHandler = async (e) => {
+  e.preventDefault();
+  setIsLoading(true)
+
+  const formData = new FormData();
+  formData.append("fullname", input.fullname);
+  formData.append("email", input.email);
+  formData.append("phoneNumber", input.phoneNumber);
+  formData.append("bio", input.bio);
+  formData.append("skills", input.skills);
+  if (input.file) {
+    formData.append("file", input.file);
+  }
+
+  try {
+    const res = await axios.post(
+      `${USER_API_END_POINT}/profile/update`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
+
+    if (res?.data?.success) {
+      dispatch(setUser(res.data.user));
+      toast.success(res.data.message);
+    } else {
+      toast.error("Something went wrong. Try again.");
     }
+
+  } catch (error) {
+    console.error(error);
+    toast.error(error.response?.data?.message || error.message);
+  }finally {
+      setIsLoading(false)
+      setOpen(false)
+    }
+};
+
 
     return (
         <div>
@@ -125,7 +154,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
                         <DialogFooter>
                             {
-                                loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Update</Button>
+                                isLoading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Update</Button>
                             }
                         </DialogFooter>
                     </form>

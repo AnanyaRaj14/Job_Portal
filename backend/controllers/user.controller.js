@@ -116,6 +116,8 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
+        console.log(fullname, email, phoneNumber, bio, skills);
+        
         const file = req.file;
         // if(!fullname || !email || !phoneNumber || !bio || !skills){
         //     return res.status(400).json({
