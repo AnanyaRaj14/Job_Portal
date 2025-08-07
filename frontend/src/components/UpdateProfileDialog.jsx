@@ -50,6 +50,7 @@ const submitHandler = async (e) => {
   }
 
   try {
+    setLoading(true);
     const res = await axios.post(
       `${USER_API_END_POINT}/profile/update`,
       formData,
@@ -61,7 +62,7 @@ const submitHandler = async (e) => {
       }
     );
 
-    if (res?.data?.success) {
+    if (res.data.success) {
       dispatch(setUser(res.data.user));
       toast.success(res.data.message);
     } else {
