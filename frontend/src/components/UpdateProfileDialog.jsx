@@ -147,6 +147,7 @@ const submitHandler = async (e) => {
                                     name="file"
                                     type="file"
                                     accept="application/pdf"
+                                    
                                     onChange={fileChangeHandler}
                                     className="col-span-3"
                                 />
