@@ -8,7 +8,7 @@ import cloudinary from "../utils/cloudinary.js";
 export const register = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, password, role } = req.body;
-        
+
         if (!fullname || !email || !phoneNumber || !password || !role) {
             return res.status(400).json({
                 message: "Something is missing",
@@ -33,8 +33,8 @@ export const register = async (req, res) => {
             phoneNumber,
             password: hashedPassword,
             role,
-            profile:{
-                profilePhoto:cloudResponse.secure_url,
+            profile: {
+                profilePhoto: cloudResponse.secure_url,
             }
         });
 
@@ -124,20 +124,30 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
-        
+
         const file = req.file;
+
         //space left for cloudinary
         const fileUri = getDataUri(file);
         const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-        
 
 
-        
+        // let cloudResponse;
+        // if (file) {
+        //     const fileUri = getDataUri(file);
+        //     const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+        //         resource_type: "raw", // Force Cloudinary to treat as non-image
+        //         folder: "resumes"
+        //     });
+
+        // }
+
+
         let skillsArray
-        if(skills){
-            skillsArray = skills.split(",");      
+        if (skills) {
+            skillsArray = skills.split(",");
         }
-        
+
         const userId = req.id; // from middlewware authentication
         let user = await User.findById(userId);
 
@@ -149,13 +159,13 @@ export const updateProfile = async (req, res) => {
         }
         // updating user data
         if (fullname) user.fullname = fullname
-         if (email) user.email = email
+        if (email) user.email = email
         if (phoneNumber) user.phoneNumber = phoneNumber
         if (bio) user.profile.bio = bio
         if (skills) user.profile.skills = skillsArray
 
         //    will add resume later
-        if(cloudResponse){
+        if (cloudResponse) {
             user.profile.resume = cloudResponse.secure_url //save the cloudinary url
             user.profile.resumeOriginalName = file.originalname //save the original file name
         }

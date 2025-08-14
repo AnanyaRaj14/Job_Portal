@@ -14,7 +14,7 @@ const isResume = true;
 
 const Profile = () => {
     const [open, setOpen] = useState(false);
-    const {user} = useSelector(store=>store.auth);
+    const { user } = useSelector(store => store.auth);
 
     return (
         <div>
@@ -60,6 +60,7 @@ const Profile = () => {
                     {
                         isResume ? <a target='_blank' href={user?.profile?.resume} className='text-blue-600 w-full hover:underline cursor-pointer'>{user?.profile?.resumeOriginalName}</a> : <span>NA</span>
                     }
+
                 </div>
             </div>
             <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
@@ -67,7 +68,7 @@ const Profile = () => {
                 {/*  Total No. of Application Table */}
                 <AppliedJobTable />
             </div>
-            <UpdateProfileDialog open={open} setOpen={setOpen}/>
+            <UpdateProfileDialog open={open} setOpen={setOpen} />
         </div>
     )
 }
