@@ -1,10 +1,11 @@
 import React from 'react'
 import { Button } from './ui/button'
-import { Badge, Bookmark } from 'lucide-react'
+import { Bookmark } from 'lucide-react'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { useNavigate } from 'react-router-dom'
+import { Badge } from './ui/badge'
 
-const Job = () => {
+const Job = ({job}) => {
     const navigate = useNavigate();
     const jobId = "ioojjsascjjkhsq"
     return (
@@ -23,17 +24,22 @@ const Job = () => {
                 </Button>
 
                 <div>
-                    <h1 className='font-medium text-lg'>Company Name</h1>
+                    <h1 className='font-medium text-lg'>{job?.company?.name}</h1>
                     <p className='text-sm text-gray-500'>India</p>
                 </div>
             </div>
             <div>
-                <h1 className='font-bold text-lg my-2'>Title</h1>
-                <p className='text-sm text-gray-600'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit nesciunt autem nulla reiciendis sapiente porro nam laboriosam perferendis neque debitis.</p>
+                <h1 className='font-bold text-lg my-2'>{job?.title}</h1>
+                <p className='text-sm text-gray-600'>{job?.description}</p>
+            </div>
+            <div className='flex items-center gap-2 mt-4'>
+                <Badge className={'text-blue-700 font-bold'} variant="ghost">{job?.position} Positions</Badge>
+                <Badge className={'text-[#F83002] font-bold'} variant="ghost">{job?.jobType}</Badge>
+                <Badge className={'text-[#7209b7] font-bold'} variant="ghost">{job?.salary}LPA</Badge>
             </div>
            
             <div className='mt-2'>
-                <Button onClick={()=> navigate(`/description/${jobId}`)} variant="outline">Details</Button>
+                <Button onClick={()=> navigate(`/description/${job?.id}`)} variant="outline">Details</Button>
                 <Button className="bg-[#7209b7] mx-3">Save For Later</Button>
             </div>
         </div>
