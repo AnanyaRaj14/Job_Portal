@@ -7,7 +7,7 @@ import { Badge } from './ui/badge'
 
 const Job = ({job}) => {
     const navigate = useNavigate();
-    const jobId = "ioojjsascjjkhsq"
+    // const jobId = "ioojjsascjjkhsq"
     return (
         <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100'>
             <div className='flex items-center justify-between'>
@@ -24,7 +24,7 @@ const Job = ({job}) => {
                 </Button>
 
                 <div>
-                    <h1 className='font-medium text-lg'>{job?.company?.name}</h1>
+                    <h1 className='font-medium text-lg'>{job?.company ? job.company.name : "Company Not Provided"}</h1>
                     <p className='text-sm text-gray-500'>India</p>
                 </div>
             </div>
@@ -39,7 +39,7 @@ const Job = ({job}) => {
             </div>
            
             <div className='mt-2'>
-                <Button onClick={()=> navigate(`/description/${job?.id}`)} variant="outline">Details</Button>
+                <Button onClick={()=> navigate(`/description/${job?._id}`)} variant="outline">Details</Button>
                 <Button className="bg-[#7209b7] mx-3">Save For Later</Button>
             </div>
         </div>
