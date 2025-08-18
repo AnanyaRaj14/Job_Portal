@@ -1,9 +1,15 @@
 import React from 'react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
+import { useParams } from 'react-router-dom';
+import useGetSingleJob from '@/hooks/useGetSingleJob';
 
 const JobDescription = () => {
-    const isApplied = false;
+    const isApplied = true;
+    const params = useParams();
+    const jobId = params.id;
+    useGetSingleJob(jobId); //custom hook to get singleJob
+
     return (
         <div className='max-w-7xl mx-auto my-10'>
             <div className='flex items-center justify-between'>
