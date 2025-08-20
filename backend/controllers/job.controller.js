@@ -3,8 +3,7 @@ import { Job } from "../models/job.model.js";
 // Post a new job (Admin only)
 export const postJob = async (req, res) => {
     try {
-        const { title, description, requirements, salary, location, jobType, experienceLevel, position, companyId } = req.body;
-        const userId = req.id;
+        const { title, description, requirements, salary, location, jobType, experienceLevel, position, companyId, userId } = req.body;
 
         if (!title || !description || !requirements || !salary || !location || !jobType || !experienceLevel || !position || !companyId) {
             return res.status(400).json({
@@ -72,6 +71,8 @@ export const getJobById = async (req, res) => {
         const job = await Job.findById(jobId)
             .populate("applications")
             .populate("company", "companyName location website");
+
+            console.log('jobs in backend : ', job);
 
         if (!job) {
             return res.status(404).json({

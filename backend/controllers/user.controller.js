@@ -6,6 +6,7 @@ import cloudinary from "../utils/cloudinary.js";
 
 // controller for register
 export const register = async (req, res) => {
+    console.log('req.body : ', req.body);
     try {
         const { fullname, email, phoneNumber, password, role } = req.body;
 
@@ -81,9 +82,12 @@ export const login = async (req, res) => {
         };
 
         const tokenData = {
-            userId: user._id
+            userId: user._id,
+            role: user.role,
+            name: user.fullname
         }
         const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
+        console.log("User logged in successfully", token);
 
         user = {
             _id: user._id,

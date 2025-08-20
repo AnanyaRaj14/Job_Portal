@@ -5,8 +5,9 @@ import { Avatar, AvatarImage } from './ui/avatar'
 import { useNavigate } from 'react-router-dom'
 import { Badge } from './ui/badge'
 
-const Job = ({job}) => {
+const Job = ({ job }) => {
     const navigate = useNavigate();
+    console.log('all jobs : ', job);
     // const jobId = "ioojjsascjjkhsq"
     return (
         <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100'>
@@ -37,9 +38,9 @@ const Job = ({job}) => {
                 <Badge className={'text-[#F83002] font-bold'} variant="ghost">{job?.jobType}</Badge>
                 <Badge className={'text-[#7209b7] font-bold'} variant="ghost">{job?.salary}LPA</Badge>
             </div>
-           
+
             <div className='mt-2'>
-                <Button onClick={()=> navigate(`/description/${job?._id}`)} variant="outline">Details</Button>
+                <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline">Details</Button>
                 <Button className="bg-[#7209b7] mx-3">Save For Later</Button>
             </div>
         </div>

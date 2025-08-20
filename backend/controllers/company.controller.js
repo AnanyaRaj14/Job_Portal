@@ -2,7 +2,7 @@ import { Company } from "../models/company.model.js";
 
 export const registerCompany = async (req, res) => {
     try {
-        const { companyName } = req.body;
+        const { companyName, userId } = req.body;
         console.log(companyName);
         
         if (!companyName) {
@@ -20,7 +20,7 @@ export const registerCompany = async (req, res) => {
         };
         company = await Company.create({
             name: companyName,
-            userId: req.id
+            userId: userId, // logged in user id
         });
 
         return res.status(201).json({
@@ -36,8 +36,8 @@ export const registerCompany = async (req, res) => {
 // get company by logged in userId
 export const getCompany =  async (req, res) => {
     try {
-        const userId = req.id; //logged in user id
-        const companies = await Company.find({userId});
+        // const userId = req.body; //logged in user id
+        const companies = await Company.find({});
         if(!companies){
             return res.status(404).json({
                 message:"Companies not found",
