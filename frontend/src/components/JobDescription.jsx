@@ -37,7 +37,7 @@ const JobDescription = () => {
                 <div>
                     <h1 className='font-bold text-xl'>{singleJob?.title}</h1>
                     <p className='text-gray-600 text-sm'>
-                        {singleJob?.company ? singleJob.company.companyName : "Company Not Provided"}
+                        {singleJob?.company?.name || "Company Not Provided"}
                     </p>
                     <div className='flex items-center gap-2 my-2'>
                         <Badge className={'text-blue-700 font-bold'} variant={'ghost'}>
@@ -53,11 +53,10 @@ const JobDescription = () => {
                 </div>
                 <Button
                     disabled={isApplied}
-                    className={`rounded-lg ${
-                        isApplied
+                    className={`rounded-lg ${isApplied
                         ? "bg-green-600 cursor-not-allowed"
                         : "bg-[#f00d0d] hover:bg-[#fe828e]"
-                    }`}
+                        }`}
                 >
                     {isApplied ? "Already Applied" : "Apply Now"}
                 </Button>
@@ -79,7 +78,7 @@ const JobDescription = () => {
                 <h1 className='font-bold my-1'>
                     Company:{" "}
                     <span className='pl-4 font-normal text-gray-800'>
-                        {singleJob?.company ? singleJob.company.companyName : "Not Provided"}
+                        {singleJob?.company?.name || "Not Provided"}
                     </span>
                 </h1>
                 <h1 className='font-bold my-1'>

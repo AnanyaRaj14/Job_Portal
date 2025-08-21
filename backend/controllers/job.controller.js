@@ -22,8 +22,9 @@ export const postJob = async (req, res) => {
             experienceLevel: Number(experienceLevel),
             position: Number(position),
             company: companyId,
-            created_by: userId
+            userId
         });
+
 
         return res.status(201).json({
             message: "New job created successfully.",
@@ -51,8 +52,8 @@ export const getAllJobs = async (req, res) => {
             ]
         };
         const jobs = await Job.find(query)
-            .populate("company")
-            .sort({ createdAt: -1 });
+            .populate("company", "name location");
+
 
         return res.status(200).json({ jobs, success: true });
     } catch (error) {
@@ -68,9 +69,9 @@ export const getAllJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
-        const job = await Job.findById(jobId)
-            .populate("applications")
-            .populate("company", "companyName location website");
+        const job = await Job.findById(req.params.id)
+            .populate("company", "name location")   // only fetch needed fields
+            .populate("applications");  // optional
 
             console.log('jobs in backend : ', job);
 
@@ -95,7 +96,7 @@ export const getJobById = async (req, res) => {
 export const getAdminJobs = async (req, res) => {
     try {
         const adminId = req.id;
-        const jobs = await Job.find({ created_by: adminId })
+        const jobs = await Job.find({ userId: adminId })  // ✅ changed created_by → userId
             .populate("company")
             .sort({ createdAt: -1 });
 
@@ -108,3 +109,4 @@ export const getAdminJobs = async (req, res) => {
         });
     }
 };
+
