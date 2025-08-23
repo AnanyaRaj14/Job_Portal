@@ -8,14 +8,17 @@ import { setSingleJob } from '@/redux/jobSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const JobDescription = () => {
-    const isApplied = true; // later replace with real logic
-    const params = useParams();
-    const jobId = params.id;
+    
     const { singleJob } = useSelector(store => store.job);
     const { user } = useSelector(store => store.auth);
+    const isApplied = singleJob?.applications?.some(application=>application.applicant==user?._id) || false
+    
+    
+    const params = useParams();
+    const jobId = params.id;
     const dispatch = useDispatch();
 
-    console.log(singleJob);
+    // console.log(singleJob);
 
     useEffect(() => {
         const fetchSingleJob = async () => {
