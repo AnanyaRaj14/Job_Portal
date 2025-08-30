@@ -5,12 +5,12 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useNavigate } from 'react-router-dom'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
-// import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const CompanyCreate = () => {
     const navigate = useNavigate()
     const [companyName, setCompanyName] = useState();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const registerNewCompany = async () => {
         try {
@@ -21,7 +21,7 @@ const CompanyCreate = () => {
                 withCredentials: true
             });
             if(res?.data?.success){
-                // dispatch(setSingleCompany(res.data.company));
+                dispatch(setSingleCompany(res.data.company));
                 toast.success(res.data.message);
                 const companyId = res?.data?.company?._id;
                 navigate(`/admin/companies/${companyId}`);
