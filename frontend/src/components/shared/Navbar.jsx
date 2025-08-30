@@ -31,7 +31,7 @@ function Navbar() {
         }
     }
     return (
-        <div className='bg-white'>
+        <div className='bg-white sticky top-0 z-50 shadow-md'>
             <div className='flex items-center justify-between mx-auto max-w-7xl h-16'>
                 <div>
                     <h1 className='text-2xl font-bold'>Elevate<span className='text-red-500'>Hire</span></h1>

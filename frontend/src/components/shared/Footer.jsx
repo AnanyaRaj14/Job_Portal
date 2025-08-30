@@ -4,7 +4,7 @@ import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 const Footer = () => {
   return (
     <footer className="relative bg-gradient-to-r from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc] border-t border-gray-200 shadow-inner backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 py-12 flex flex-col md:flex-row md:items-start md:justify-between gap-12">
+      <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row md:items-start md:justify-between gap-8">
 
         {/* Brand */}
         <div className="text-center md:text-left">

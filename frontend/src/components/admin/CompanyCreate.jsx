@@ -6,6 +6,8 @@ import { Button } from '../ui/button'
 import { useNavigate } from 'react-router-dom'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
 import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+import axios from 'axios'
 
 const CompanyCreate = () => {
     const navigate = useNavigate()
@@ -24,6 +26,7 @@ const CompanyCreate = () => {
                 dispatch(setSingleCompany(res.data.company));
                 toast.success(res.data.message);
                 const companyId = res?.data?.company?._id;
+                console.log(companyId);
                 navigate(`/admin/companies/${companyId}`);
             }
         } catch (error) {
