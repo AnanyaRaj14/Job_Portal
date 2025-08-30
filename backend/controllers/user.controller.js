@@ -95,13 +95,15 @@ export const login = async (req, res) => {
             email: user.email,
             phoneNumber: user.phoneNumber,
             role: user.role,
-            profile: user.profile
+            profile: user.profile,
+            token: token
         }
 
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({
+        return res.status(200).json({
             message: `Welcome back ${user.fullname}`,
             user,
-            success: true
+            success: true,
+            token
         })
 
     } catch (error) {
@@ -194,3 +196,5 @@ export const updateProfile = async (req, res) => {
 
     }
 }
+
+

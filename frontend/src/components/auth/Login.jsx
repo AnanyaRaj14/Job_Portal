@@ -11,9 +11,12 @@ import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading, setUser } from '../../redux/authSlice'
 import { Loader2 } from 'lucide-react'
+import { useCookies } from 'react-cookie'
 
 
 const Login = () => {
+    const [cookies, setCookie, removeCookie] = useCookies();
+
     const [input, setInput] = useState({
         email: "",
         password: "",
@@ -33,7 +36,7 @@ const Login = () => {
 
         try {
             dispatch(setLoading(true))
-            
+
             const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
                 headers: {
                     "Content-Type": "application/json"
@@ -42,6 +45,8 @@ const Login = () => {
             });
             if (res.data.success) {
                 dispatch(setUser(res.data.user));
+                console.log('Login successful:', res.data.token);
+                setCookie("token", res.data?.token);
                 navigate("/");
                 toast.success(res.data.message);
             }
