@@ -18,6 +18,7 @@ const CompanySetup = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const params = useParams();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -40,7 +41,7 @@ const CompanySetup = () => {
     }
     try {
       setLoading(true);
-      const res = await axios.put(`${COMPANY_API_END_POINT}/update/${useParams.id}`, formData, {
+      const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
