@@ -7,6 +7,9 @@ import { Input } from '../ui/input'
 import axios from 'axios'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
 import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
 
 const CompanySetup = () => {
   const [input, setInput] = useState({
@@ -19,6 +22,7 @@ const CompanySetup = () => {
 
   const [loading, setLoading] = useState(false);
   const params = useParams();
+  const navigate = useNavigate()
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -49,11 +53,12 @@ const CompanySetup = () => {
       })
       if(res.data.success){
         toast.success(res.data.message);
-        Navigate("/admin/companies");
+        navigate("/admin/companies");
       }
     } catch (error) {
       console.log(error);
-    } finally {
+      toast.error(error.response.data.message);
+    }finally{
       setLoading(false);
     }
   }
@@ -64,7 +69,7 @@ const CompanySetup = () => {
       <div className='max-w-xl mx-auto my-10'>
         <form onSubmit={submitHandler}>
           <div className='flex items-center gap-5 p-8'>
-            <Button varient="outline" className="flex items-center gap-2 text-gray-500 font-semibold">
+            <Button onClick={() => navigate("/admin/companies")} varient="outline" className="flex items-center gap-2 text-gray-500 font-semibold">
               <ArrowLeft />
               <span>Back</span>
             </Button>
@@ -116,7 +121,9 @@ const CompanySetup = () => {
               />
             </div>
           </div>
-          <Button type="submit" className="w-full my-4">Update</Button>
+           {
+                        loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' />Update</Button> : <Button type="submit" className="w-full my-4">Update</Button>
+                    }
         </form>
       </div>
 
