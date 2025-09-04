@@ -72,7 +72,7 @@ const CompanySetup = () => {
       location: singleCompany.location || "",
       file: singleCompany.file || null
     })
-  })
+  },[singleCompany]);
 
   return (
     <div>
