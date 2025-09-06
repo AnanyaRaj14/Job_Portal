@@ -13,11 +13,11 @@ const Home = () => {
   useGetAllJobs();
   const navigate = useNavigate();
   const {user} = useSelector(store=>store.auth);
-  useEffect(()=>{
-    if(user?.role === 'recruiter'){
-      navigate("/admin/companies");
-    }
-  }, []);
+  // useEffect(()=>{
+  //   if(user?.role === 'recruiter'){
+  //     navigate("/admin/companies");
+  //   }
+  // }, []);
   return (
     <div>
       <Navbar/>
