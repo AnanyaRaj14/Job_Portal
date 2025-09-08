@@ -11,6 +11,7 @@ export const postJob = async (req, res) => {
                 success: false
             });
         }
+        console.log(req.body);
 
         const job = await Job.create({
             title,
@@ -54,7 +55,7 @@ export const getAllJobs = async (req, res) => {
         const jobs = await Job.find(query)
             .populate("company", "name location");
 
-
+        console.log('Jobs fetched:', jobs);
         return res.status(200).json({ jobs, success: true });
     } catch (error) {
         console.error(error);

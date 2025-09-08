@@ -10,6 +10,7 @@ const jobsArray = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const Jobs = () => {
     const {allJobs} = useSelector(store=>store.job);
+    console.log('all jobs from redux : ', allJobs);
 
     return (
         <div>
