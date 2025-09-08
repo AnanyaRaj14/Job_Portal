@@ -54,6 +54,10 @@ export const getAllJobs = async (req, res) => {
         };
         const jobs = await Job.find(query)
             .populate("company", "name location");
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
         console.log('Jobs fetched:', jobs);
         return res.status(200).json({ jobs, success: true });
