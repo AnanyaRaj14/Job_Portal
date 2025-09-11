@@ -23,6 +23,23 @@ const JobDescription = () => {
 
     console.log("singleJob: ", singleJob);
 
+    const applyJobHandler = async () => {
+        try {
+            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {withCredentials:true});
+            
+            if(res.data.success){
+                setIsApplied(true);
+                const updatedSingleJob = {...singleJob, applications:[...singleJob.applications,{applicant:user?._id}]}
+                dispatch(setSingleJob(updatedSingleJob)); 
+                toast.success(res.data.message);
+
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message);
+        }
+    }
+
     useEffect(() => {
         const fetchSingleJob = async () => {
             try {
