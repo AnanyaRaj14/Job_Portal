@@ -20,6 +20,7 @@ const CompanyCreate = () => {
 
     const decoded = jwtDecode(cookies.token);
     const userId = decoded.userId;
+    console.log(userId);
 
     const registerNewCompany = async () => {
         if (!companyName.trim()) {
