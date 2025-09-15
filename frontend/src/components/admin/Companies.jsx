@@ -6,6 +6,7 @@ import CompaniesTable from './CompaniesTable'
 import { useNavigate } from 'react-router-dom'
 
 const Companies = () => {
+    const [input, setInput] = useState("");
     const navigate = useNavigate();
     return (
         <div>
@@ -15,11 +16,12 @@ const Companies = () => {
                     <Input
                         className="w-fit"
                         placeholder="Filter by name"
+                        value={input}
                         onChange={(e) => setInput(e.target.value)}
                     />
                     <Button onClick={() => navigate("/admin/companies/create")}>New Company</Button>
                 </div>
-                <CompaniesTable />
+                <CompaniesTable filterText={input}  />
             </div>
         </div>
     )
