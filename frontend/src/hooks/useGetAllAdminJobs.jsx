@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { JOB_API_END_POINT } from "@/utils/constant";
 import { useDispatch } from "react-redux";
-import { setAllJobs } from "@/redux/jobSlice";
+import { setAllAdminJobs} from "@/redux/jobSlice";
 
 
 const useGetAllJobs = () => {
@@ -13,7 +13,7 @@ const useGetAllJobs = () => {
                 const res = await axios.get(`${JOB_API_END_POINT}/getadminjobs`, {withCredentials:true});
                 console.log("jobs Response:", res.data);
                 if(res.data.success){
-                    dispatch(setAllJobs(res.data.jobs));
+                    dispatch(setAllAdminJobs(res.data.jobs));
                 }
             } catch (error) {
                 console.log(error);
