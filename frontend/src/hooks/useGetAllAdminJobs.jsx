@@ -5,10 +5,10 @@ import { useDispatch } from "react-redux";
 import { setAllAdminJobs} from "@/redux/jobSlice";
 
 
-const useGetAllJobs = () => {
+const useGetAllAdminJobs = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        const fetchAllJobs = async () => {
+        const fetchAllAdminJobs = async () => {
             try {
                 const res = await axios.get(`${JOB_API_END_POINT}/getadminjobs`, {withCredentials:true});
                 console.log("jobs Response:", res.data);
@@ -20,8 +20,8 @@ const useGetAllJobs = () => {
                 
             }
         }
-        fetchAllJobs();
+        fetchAllAdminJobs();
     },[])
 }
 
-export default useGetAllJobs;
+export default useGetAllAdminJobs;

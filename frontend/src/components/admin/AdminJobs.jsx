@@ -6,8 +6,10 @@ import CompaniesTable from './CompaniesTable'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import AdminJobsTable from './AdminJobsTable'
+import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs'
 
 const AdminJobs = () => {
+    useGetAllAdminJobs();
     const [input, setInput] = useState("");
     const navigate = useNavigate();
     const dispatch = useDispatch();
