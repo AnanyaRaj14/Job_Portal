@@ -5,27 +5,31 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Edit2, MoreHorizontal } from 'lucide-react'
 import axios from 'axios'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
+import { useSelector } from 'react-redux'
 
 const AdminJobsTable = ({ filterText }) => {
-    const [companies, setCompanies] = useState([]);
+    // const [companies, setCompanies] = useState([]);
+    const {allAdminJobs = [] } = useSelector(store=>store.job || {});
 
-    useEffect(() => {
-        const getCompanies = async () => {
-            try {
-                const res = await axios.get(`${COMPANY_API_END_POINT}/get`);
-                setCompanies(Array.isArray(res.data) ? res.data : res.data.companies || []);
-            } catch (error) {
-                console.error("Error fetching companies:", error);
-                setCompanies([]);
-            }
-        };
-        getCompanies();
-    }, []);
+    // useEffect(() => {
+    //     const getCompanies = async () => {
+    //         try {
+    //             const res = await axios.get(`${COMPANY_API_END_POINT}/get`);
+    //             setCompanies(Array.isArray(res.data) ? res.data : res.data.companies || []);
+    //         } catch (error) {
+    //             console.error("Error fetching companies:", error);
+    //             setCompanies([]);
+    //         }
+    //     };
+    //     getCompanies();
+    // }, []);
 
-    // Apply filtering
-    const filteredCompanies = companies.filter(company =>
-        company.name?.toLowerCase().includes(filterText.toLowerCase())
-    );
+    // Apply filtering (check title or company name)
+    const filteredJobs = (allAdminJobs || []).filter(job =>
+    job.title?.toLowerCase().includes(filterText.toLowerCase()) ||
+    job.company?.name?.toLowerCase().includes(filterText.toLowerCase())
+);
+
 
     return (
         <div>
@@ -40,11 +44,12 @@ const AdminJobsTable = ({ filterText }) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {filteredCompanies.length > 0 ? (
-                        filteredCompanies.map((company) => (
-                            <TableRow key={company._id || company.id}>
-                                <TableCell>{company.name}</TableCell>
-                                <TableCell>{company.createdAt?.slice(0, 10)}</TableCell>
+                    {filteredJobs.length > 0 ? (
+                        filteredJobs.map((job) => (
+                            <TableRow key={job._id}>
+                                <TableCell>{job.company?.name}</TableCell>
+                                <TableCell>{job.title}</TableCell>
+                                <TableCell>{job.createdAt?.slice(0, 10)}</TableCell>
                                 <TableCell className="text-right cursor-pointer">
                                     <Popover>
                                         <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
@@ -61,7 +66,7 @@ const AdminJobsTable = ({ filterText }) => {
                     ) : (
                         <TableRow>
                             <TableCell colSpan={4} className="text-center text-gray-500">
-                                No companies found
+                                No jobs found
                             </TableCell>
                         </TableRow>
                     )}

@@ -7,6 +7,7 @@ import { setAllAdminJobs} from "@/redux/jobSlice";
 
 const useGetAllAdminJobs = () => {
     const dispatch = useDispatch();
+    
     useEffect(() => {
         const fetchAllAdminJobs = async () => {
             try {
