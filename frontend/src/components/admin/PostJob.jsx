@@ -3,6 +3,9 @@ import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+// import { useSelector } from 'react-redux'
+
+const companyArray = [];
 
 const PostJob = () => {
     const [input, setInput] = useState({
@@ -16,6 +19,8 @@ const PostJob = () => {
         position: 0,
         companyId: ""
     });
+
+    // const {companies} = useSelector(store=>store.company);
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -107,8 +112,15 @@ const PostJob = () => {
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
                             />
                         </div>
+                        {/* {
+                            companies.length >=
+                        } */}
                     </div>
+
                     <Button className="w-full my-4">Post New Job</Button>
+                    {/* {
+                  companyArray.length === 0 && <p className='text-xs text-red-600 font-bold text-center my-3'>*Please register a company first, before posting a jobs</p>      
+                    } */}
                 </form>
             </div>
         </div>
