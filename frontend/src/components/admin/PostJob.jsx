@@ -3,7 +3,8 @@ import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-// import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 
 const companyArray = [];
 
@@ -20,7 +21,7 @@ const PostJob = () => {
         companyId: ""
     });
 
-    // const {companies} = useSelector(store=>store.company);
+    const {companies} = useSelector(store=>store.company);
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -112,9 +113,26 @@ const PostJob = () => {
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
                             />
                         </div>
-                        {/* {
-                            companies.length >=
-                        } */}
+                        {
+                            companies.length > 0 && (
+                                <Select>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="Select a Company" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                           {
+                                                companies.map((company) => {
+                                                    return (
+                                                        <SelectItem value={company?.name?.toLowerCase()}>{company.name}</SelectItem>
+                                                    )
+                                                })
+                                           } 
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )
+                        }
                     </div>
 
                     <Button className="w-full my-4">Post New Job</Button>

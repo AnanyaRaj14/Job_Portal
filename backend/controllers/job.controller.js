@@ -54,10 +54,6 @@ export const getAllJobs = async (req, res) => {
         };
         const jobs = await Job.find(query)
             .populate("company", "name location");
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
         console.log('Jobs fetched:', jobs);
         return res.status(200).json({ jobs, success: true });
@@ -74,10 +70,6 @@ export const getAllJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
-<<<<<<< Updated upstream
-        console.log(jobId);
-=======
->>>>>>> Stashed changes
         const job = await Job.findById(req.params.id)
             .populate("company", "name location")   // only fetch needed fields
             .populate("applications");  // optional
@@ -103,10 +95,6 @@ export const getJobById = async (req, res) => {
 export const getAdminJobs = async (req, res) => {
     try {
         const adminId = req.id;
-<<<<<<< Updated upstream
-        console.log(adminId);
-=======
->>>>>>> Stashed changes
         const jobs = await Job.find({ userId: adminId })  // ✅ changed created_by → userId
             .populate("company")
             .sort({ createdAt: -1 });
