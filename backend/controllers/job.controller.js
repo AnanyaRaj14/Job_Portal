@@ -95,24 +95,35 @@ export const getJobById = async (req, res) => {
 // Get jobs created by an admin (Admin side)
 export const getAdminJobs = async (req, res) => {
     try {
-        const adminId = req.id;
-        console.log(adminId);
-        const jobs = await Job.find({ userId: adminId })  // ✅ changed created_by → userId
+        const { adminId } = req.query; // ✅ FIXED
+        console.log("adminID : ", adminId);
+
+        if (!adminId) {
+            return res.status(400).json({
+                message: "Admin ID is required",
+                success: false,
+            });
+        }
+
+        const jobs = await Job.find({ userId: adminId })
             .populate("company")
             .sort({ createdAt: -1 });
-        if(jobs.length === 0) {
+
+        if (jobs.length === 0) {
             return res.status(404).json({
                 message: "Jobs not found",
-                success: false
-            })
+                success: false,
+            });
         }
+
         return res.status(200).json({ jobs, success: true });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
             message: "Internal server error",
-            success: false
+            success: false,
         });
     }
 };
+
 

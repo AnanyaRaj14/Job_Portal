@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import { useCookies } from 'react-cookie'
+import { jwtDecode } from 'jwt-decode'
 // import { useSelector } from 'react-redux'
 
 const companyArray = [];
@@ -20,11 +22,33 @@ const PostJob = () => {
         companyId: ""
     });
 
+    const [tokenData, setTokenData] = useState([]);
+
     // const {companies} = useSelector(store=>store.company);
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     };
+
+    const [Cookies] = useCookies();
+
+    const getUserData = async () => {
+        const decoded = jwtDecode(Cookies.token);
+        setTokenData(decoded);
+        console.log(decoded);
+    }
+
+    useEffect(() => {
+        getUserData();
+    }, []);
+
+    const createJobPost = (e) => {
+        e.preventDefault();
+        console.log({
+            "the job details are ": input,
+            "the user details are ": tokenData
+        });
+    }
 
     return (
         <div>
@@ -117,7 +141,7 @@ const PostJob = () => {
                         } */}
                     </div>
 
-                    <Button className="w-full my-4">Post New Job</Button>
+                    <Button onClick={createJobPost} className="w-full my-4">Post New Job</Button>
                     {/* {
                   companyArray.length === 0 && <p className='text-xs text-red-600 font-bold text-center my-3'>*Please register a company first, before posting a jobs</p>      
                     } */}
