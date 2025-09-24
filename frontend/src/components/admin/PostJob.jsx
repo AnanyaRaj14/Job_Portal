@@ -54,7 +54,7 @@ const PostJob = () => {
         <div>
             <Navbar />
             <div className='flex items-center justify-center w-screen my-5'>
-                <form className='p-8 max-w-4xl border border-gray-200 shadow-lg rounded-md'>
+                <form onSubmit={submitHandler} className='p-8 max-w-4xl border border-gray-200 shadow-lg rounded-md'>
                     <div className='grid grid-cols-2 gap-2'>
                         <div>
                             <Label>Title</Label>
@@ -136,9 +136,26 @@ const PostJob = () => {
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
                             />
                         </div>
-                        {/* {
-                            companies.length >=
-                        } */}
+                        {
+                            companies && companies.length > 0 && (
+                                <Select onChange={selectChangeHandler}>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="Select a Company" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {
+                                                companies.map((company) => {
+                                                    return (
+                                                        <SelectItem value={company?.name?.toLowerCase()}>{company.name}</SelectItem>
+                                                    )
+                                                })
+                                            }
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )
+                        }
                     </div>
 
                     <Button onClick={createJobPost} className="w-full my-4">Post New Job</Button>

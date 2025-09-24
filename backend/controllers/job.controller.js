@@ -70,7 +70,6 @@ export const getAllJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
-        console.log(jobId);
         const job = await Job.findById(req.params.id)
             .populate("company", "name location")   // only fetch needed fields
             .populate("applications");  // optional
