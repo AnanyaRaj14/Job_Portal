@@ -11,7 +11,7 @@ export const postJob = async (req, res) => {
                 success: false
             });
         }
-        console.log(req.body);
+        console.log(userId);
 
         const job = await Job.create({
             title,

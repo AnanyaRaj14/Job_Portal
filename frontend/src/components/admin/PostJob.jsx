@@ -5,7 +5,13 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useCookies } from 'react-cookie'
 import { jwtDecode } from 'jwt-decode'
-// import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import axios from 'axios'
+import { toast } from 'sonner'
+import { JOB_API_END_POINT } from '@/utils/constant'
+
+
 
 const companyArray = [];
 
@@ -17,23 +23,23 @@ const PostJob = () => {
         salary: "",
         location: "",
         jobType: "",
-        experience: "",
+        experienceLevel: "",
         position: 0,
-        companyId: ""
+        companyId: "",
+        userId: ""
     });
 
     const [tokenData, setTokenData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    // const {companies} = useSelector(store=>store.company);
-
-    const changeEventHandler = (e) => {
-        setInput({ ...input, [e.target.name]: e.target.value });
-    };
+    const { companies } = useSelector(store => store.company);
+    console.log("the companies are ", companies);
 
     const [Cookies] = useCookies();
 
     const getUserData = async () => {
         const decoded = jwtDecode(Cookies.token);
+        console.log("the decoded data is ", decoded.userId);
         setTokenData(decoded);
         console.log(decoded);
     }
@@ -42,19 +48,61 @@ const PostJob = () => {
         getUserData();
     }, []);
 
-    const createJobPost = (e) => {
+    // const createJobPost = (e) => {
+    //     e.preventDefault();
+    //     console.log({
+    //         "the job details are ": input,
+    //         "the user details are ": tokenData.userId
+    //     });
+    // }
+
+        const createJobPost = async (e) => {
         e.preventDefault();
-        console.log({
-            "the job details are ": input,
-            "the user details are ": tokenData
-        });
+        // console.log(input);
+        try {
+            setLoading(true);
+            const res = await axios.post(`${JOB_API_END_POINT}/post`, input, {
+                ...input,
+                userId: tokenData.userId
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+            console.log("the response after creating job is ", res.data);
+            if (res.data.success) {
+                toast.success(res.data.message);
+                navigate("/admin/jobs");
+            }
+        } catch (error) {
+            toast.error(error.response.data.message);
+        } finally {
+            setLoading(false);
+        }
     }
+
+    const changeEventHandler = (e) => {
+        setInput({ ...input, [e.target.name]: e.target.value });
+    };
+
+    const selectChangeHandler = (value) => {
+        const selectedCompany = companies.find(
+            (company) => company.name.toLowerCase() === value
+        );
+
+        setInput((prev) => ({
+            ...prev,
+            companyId: selectedCompany._id,
+        }));
+    };
+
 
     return (
         <div>
             <Navbar />
             <div className='flex items-center justify-center w-screen my-5'>
-                <form onSubmit={submitHandler} className='p-8 max-w-4xl border border-gray-200 shadow-lg rounded-md'>
+                <form onSubmit={createJobPost} className='p-8 max-w-4xl border border-gray-200 shadow-lg rounded-md'>
                     <div className='grid grid-cols-2 gap-2'>
                         <div>
                             <Label>Title</Label>
@@ -120,8 +168,8 @@ const PostJob = () => {
                             <Label>Experience</Label>
                             <Input
                                 type="text"
-                                name="experience"
-                                value={input.experience}
+                                name="experienceLevel"
+                                value={input.experienceLevel}
                                 onChange={changeEventHandler}
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
                             />
@@ -137,20 +185,18 @@ const PostJob = () => {
                             />
                         </div>
                         {
-                            companies && companies.length > 0 && (
-                                <Select onChange={selectChangeHandler}>
+                            companies && companies.length >= 0 && (
+                                <Select onValueChange={selectChangeHandler}>
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select a Company" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            {
-                                                companies.map((company) => {
-                                                    return (
-                                                        <SelectItem value={company?.name?.toLowerCase()}>{company.name}</SelectItem>
-                                                    )
-                                                })
-                                            }
+                                            {companies.map((company) => (
+                                                <SelectItem key={company._id} value={company.name.toLowerCase()}>
+                                                    {company.name}
+                                                </SelectItem>
+                                            ))}
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
@@ -159,9 +205,11 @@ const PostJob = () => {
                     </div>
 
                     <Button onClick={createJobPost} className="w-full my-4">Post New Job</Button>
-                    {/* {
-                  companyArray.length === 0 && <p className='text-xs text-red-600 font-bold text-center my-3'>*Please register a company first, before posting a jobs</p>      
-                    } */}
+                    {
+                        (!companies || companies.length === 0) && (
+                            <p className='text-red-500'>No companies found. Please create a company first.</p>
+                        )
+                    }
                 </form>
             </div>
         </div>

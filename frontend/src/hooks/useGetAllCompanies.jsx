@@ -11,7 +11,7 @@ const useGetAllCompanies = () => {
         const fetchCompanies = async () => {
             try {
                 const res = await axios.get(`${COMPANY_API_END_POINT}/get`, {withCredentials:true});
-                // console.log("jobs Response:", res.data);
+                console.log("jobs Response:", res.data);
                 if(res.data.success){
                     dispatch(setCompanies(res.data.companies));
                 }
@@ -21,6 +21,6 @@ const useGetAllCompanies = () => {
         }
         fetchCompanies();
     },[])
+    return;
 }
-
 export default useGetAllCompanies;
