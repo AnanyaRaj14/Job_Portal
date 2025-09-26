@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import axios from 'axios'
 import { toast } from 'sonner'
 import { JOB_API_END_POINT } from '@/utils/constant'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -31,18 +32,23 @@ const PostJob = () => {
 
     const [tokenData, setTokenData] = useState([]);
     const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
 
     const { companies } = useSelector(store => store.company);
     console.log("the companies are ", companies);
 
     const [Cookies] = useCookies();
 
-    const getUserData = async () => {
-        const decoded = jwtDecode(Cookies.token);
-        console.log("the decoded data is ", decoded.userId);
-        setTokenData(decoded);
-        console.log(decoded);
-    }
+	const getUserData = async () => {
+		try {
+			if (!Cookies?.token) return;
+			const decoded = jwtDecode(Cookies.token);
+			console.log("the decoded data is ", decoded.userId);
+			setTokenData(decoded);
+		} catch (err) {
+			console.log("Failed to decode token", err);
+		}
+	}
 
     useEffect(() => {
         getUserData();
@@ -56,27 +62,30 @@ const PostJob = () => {
     //     });
     // }
 
-        const createJobPost = async (e) => {
+		const createJobPost = async (e) => {
         e.preventDefault();
-        // console.log(input);
+        console.log(input);
         try {
             setLoading(true);
-            const res = await axios.post(`${JOB_API_END_POINT}/post`, input, {
-                ...input,
-                userId: tokenData.userId
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true
-            });
+			const payload = {
+				...input,
+				userId: tokenData?.userId
+			};
+			const res = await axios.post(
+				`${JOB_API_END_POINT}/post`,
+				payload,
+				{
+					headers: { 'Content-Type': 'application/json' },
+					withCredentials: true
+				}
+			);
             console.log("the response after creating job is ", res.data);
             if (res.data.success) {
                 toast.success(res.data.message);
                 navigate("/admin/jobs");
             }
         } catch (error) {
-            toast.error(error.response.data.message);
+			toast.error(error?.response?.data?.message || 'Failed to post job');
         } finally {
             setLoading(false);
         }
@@ -184,8 +193,8 @@ const PostJob = () => {
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
                             />
                         </div>
-                        {
-                            companies && companies.length >= 0 && (
+					{
+						companies && companies.length > 0 && (
                                 <Select onValueChange={selectChangeHandler}>
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select a Company" />
@@ -204,7 +213,7 @@ const PostJob = () => {
                         }
                     </div>
 
-                    <Button onClick={createJobPost} className="w-full my-4">Post New Job</Button>
+					<Button type="submit" className="w-full my-4" disabled={loading}>Post New Job</Button>
                     {
                         (!companies || companies.length === 0) && (
                             <p className='text-red-500'>No companies found. Please create a company first.</p>

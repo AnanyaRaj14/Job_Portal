@@ -1,9 +1,10 @@
 import { Job } from "../models/job.model.js";
+import { Company } from "../models/company.model.js";
 
 // Post a new job (Admin only)
 export const postJob = async (req, res) => {
     try {
-        const { title, description, requirements, salary, location, jobType, experienceLevel, position, companyId, userId } = req.body;
+        const { title, description, requirements, salary, location, jobType, experienceLevel, position, companyId } = req.body;
 
         if (!title || !description || !requirements || !salary || !location || !jobType || !experienceLevel || !position || !companyId) {
             return res.status(400).json({
@@ -11,26 +12,71 @@ export const postJob = async (req, res) => {
                 success: false
             });
         }
-        console.log(userId);
+
+        const authenticatedUserId = req.id || req.body.userId; 
+
+        if (!authenticatedUserId) {
+            return res.status(401).json({
+                message: "User not authenticated",
+                success: false
+            });
+        }
+
+        // Validate company exists
+        const company = await Company.findById(companyId);
+        if (!company) {
+            return res.status(404).json({
+                message: "Company not found.",
+                success: false
+            });
+        }
+
+        // Optional: ensure the authenticated user owns the company (admin creating jobs)
+        if (company.userId?.toString() !== authenticatedUserId.toString()) {
+            return res.status(403).json({
+                message: "You are not authorized to post jobs for this company.",
+                success: false
+            });
+        }
+
+        // Normalize inputs
+        const normalizedRequirements = Array.isArray(requirements)
+            ? requirements
+            : String(requirements)
+                .split(",")
+                .map((reqItem) => reqItem.trim())
+                .filter((reqItem) => reqItem.length > 0);
+
+        const parsedSalary = Number(salary);
+        const parsedExperienceLevel = Number(experienceLevel);
+        const parsedPosition = Number(position);
+
+        if (Number.isNaN(parsedSalary) || Number.isNaN(parsedExperienceLevel) || Number.isNaN(parsedPosition)) {
+            return res.status(400).json({
+                message: "Invalid numeric fields: salary, experienceLevel, or position.",
+                success: false
+            });
+        }
 
         const job = await Job.create({
-            title,
-            description,
-            requirements: Array.isArray(requirements) ? requirements : requirements.split(","),
-            salary: Number(salary),
-            location,
-            jobType,
-            experienceLevel: Number(experienceLevel),
-            position: Number(position),
+            title: title.trim(),
+            description: description.trim(),
+            requirements: normalizedRequirements,
+            salary: parsedSalary,
+            location: location.trim(),
+            jobType: jobType.trim(),
+            experienceLevel: parsedExperienceLevel,
+            position: parsedPosition,
             company: companyId,
-            userId
+            userId: authenticatedUserId
         });
 
+        const populatedJob = await job.populate("company", "name location");
 
 
         return res.status(201).json({
             message: "New job created successfully.",
-            job,
+            job: populatedJob,
             success: true
         });
 
