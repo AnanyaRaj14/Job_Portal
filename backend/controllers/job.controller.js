@@ -24,7 +24,9 @@ export const postJob = async (req, res) => {
             position: Number(position),
             company: companyId,
             userId
+            userId
         });
+
 
 
         return res.status(201).json({
@@ -54,6 +56,8 @@ export const getAllJobs = async (req, res) => {
         };
         const jobs = await Job.find(query)
             .populate("company", "name location");
+            .populate("company", "name location");
+
 
         console.log('Jobs fetched:', jobs);
         return res.status(200).json({ jobs, success: true });
@@ -70,6 +74,9 @@ export const getAllJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
+        const job = await Job.findById(req.params.id)
+            .populate("company", "name location")   // only fetch needed fields
+            .populate("applications");  // optional
         const job = await Job.findById(req.params.id)
             .populate("company", "name location")   // only fetch needed fields
             .populate("applications");  // optional
@@ -94,17 +101,8 @@ export const getJobById = async (req, res) => {
 // Get jobs created by an admin (Admin side)
 export const getAdminJobs = async (req, res) => {
     try {
-        const { adminId } = req.query; // ✅ FIXED
-        console.log("adminID : ", adminId);
-
-        if (!adminId) {
-            return res.status(400).json({
-                message: "Admin ID is required",
-                success: false,
-            });
-        }
-
-        const jobs = await Job.find({ userId: adminId })
+        const adminId = req.id;
+        const jobs = await Job.find({ userId: adminId })  // ✅ changed created_by → userId
             .populate("company")
             .sort({ createdAt: -1 });
 
@@ -124,5 +122,6 @@ export const getAdminJobs = async (req, res) => {
         });
     }
 };
+
 
 
