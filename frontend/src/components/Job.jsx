@@ -28,7 +28,7 @@ const Job = ({ job }) => {
 
                 <Button className="p-6" variant="outline" size="icon">
                     <Avatar>
-                        <AvatarImage src="https://s3.amazonaws.com/cdn.designcrowd.com/blog/40-Brand-Logos-for-Creative-and-Cool-Companies/orange-electronics-company-by-ions-brandcrowd.png" />
+                        <AvatarImage src={job?.company?.logo} />
                     </Avatar>
                 </Button>
 
