@@ -24,7 +24,6 @@ export const postJob = async (req, res) => {
             position: Number(position),
             company: companyId,
             userId
-            userId
         });
 
 
@@ -56,7 +55,6 @@ export const getAllJobs = async (req, res) => {
         };
         const jobs = await Job.find(query)
             .populate("company", "name location");
-            .populate("company", "name location");
 
 
         console.log('Jobs fetched:', jobs);
@@ -77,10 +75,7 @@ export const getJobById = async (req, res) => {
         const job = await Job.findById(req.params.id)
             .populate("company", "name location")   // only fetch needed fields
             .populate("applications");  // optional
-        const job = await Job.findById(req.params.id)
-            .populate("company", "name location")   // only fetch needed fields
-            .populate("applications");  // optional
-
+        
         if (!job) {
             return res.status(404).json({
                 message: "Job not found.",
