@@ -2,10 +2,12 @@ import React from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { MoreHorizontal } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { useSelector } from 'react-redux';
 
 const shortlistingStatus = ["Accepted", "Rejected"];
 
 const ApplicantsTable = () => {
+    const { applicants } = useSelector(store => store.application);
     return (
         <div>
             <Table>
@@ -23,31 +25,40 @@ const ApplicantsTable = () => {
                 </TableHeader>
 
                 <TableBody>
-                    <TableRow>
-                        <TableCell>Ananya Mishra</TableCell>
-                        <TableCell>ananya@test.com</TableCell>
-                        <TableCell>9735264795006847</TableCell>
-                        <TableCell>Resume</TableCell>
-                        <TableCell>01/10/2025</TableCell>
-                        <TableCell className="float-right cursor-pointer">
-                            <Popover>
-                                <PopoverTrigger>
-                                    <MoreHorizontal />
-                                </PopoverTrigger>
-                                <PopoverContent className="w-32">
+                    {
+                        applicants && applicants?.applications?.map((item) => (
+                            <TableRow key={item_id}>
+                                <TableCell>{item?.applicant?.fullname}</TableCell>
+                                <TableCell>{item?.applicant?.email}</TableCell>
+                                <TableCell>{item?.applicant?.phoneNumber}</TableCell>
+                                <TableCell>
                                     {
-                                        shortlistingStatus.map((status, index) => {
-                                            return (
-                                                <div key={index} className='flex w-fit items-center my-2 cursor-pointer'>
-                                                    <span>{status}</span>
-                                                </div>
-                                            )
-                                        })
+                                        item.applicant?.profile?.resume ? <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a> : <span>NA</span>
                                     }
-                                </PopoverContent>
-                            </Popover>
-                        </TableCell>
-                    </TableRow>
+                                </TableCell>
+                                <TableCell>{item?.applicant.createdAt.split("T")[0]}</TableCell>
+                                <TableCell className="float-right cursor-pointer">
+                                    <Popover>
+                                        <PopoverTrigger>
+                                            <MoreHorizontal />
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-32">
+                                            {
+                                                shortlistingStatus.map((status, index) => {
+                                                    return (
+                                                        <div key={index} className='flex w-fit items-center my-2 cursor-pointer'>
+                                                            <span>{status}</span>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </PopoverContent>
+                                    </Popover>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    }
+
                 </TableBody>
             </Table>
         </div >
