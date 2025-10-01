@@ -1,0 +1,25 @@
+import React from 'react'
+import { Table, TableCaption, TableHead, TableHeader, TableRow } from '../ui/table'
+
+const ApplicantsTable = () => {
+    return (
+        <div>
+            <Table>
+                <TableCaption>A list of your recent applied user</TableCaption>
+            </Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>FullName</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Contact</TableHead>
+                    <TableHead>Resume</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
+                </TableRow>
+            </TableHeader>
+            
+        </div>
+    )
+}
+
+export default ApplicantsTable

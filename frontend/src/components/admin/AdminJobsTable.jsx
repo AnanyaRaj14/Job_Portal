@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Table, TableBody, TableCaption, TableRow, TableCell, TableHead, TableHeader } from '../ui/table'
-import { Avatar, AvatarImage } from '../ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Edit2, Eye, MoreHorizontal } from 'lucide-react'
 import axios from 'axios'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const AdminJobsTable = ({ filterText }) => {
     // const [companies, setCompanies] = useState([]);
     const {allAdminJobs = [] } = useSelector(store=>store.job || {});
+     const navigate = useNavigate();
 
     // useEffect(() => {
     //     const getCompanies = async () => {
@@ -54,11 +55,11 @@ const AdminJobsTable = ({ filterText }) => {
                                     <Popover>
                                         <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
                                         <PopoverContent className="w-32">
-                                            <div className='flex items-center gap-2 w-fit cursor-pointer'>
+                                            <div onClick={()=> navigate(`/admin/companies/${job._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
                                                 <Edit2 className='w-4' />
                                                 <span>Edit</span>
                                             </div>
-                                            <div className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
+                                            <div onClick={()=> navigate(`/admin/jobs/${job._id}/applicants`)}  className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
                                                 <Eye className='w-4' />
                                                 <span>Applicants</span>
                                             </div>

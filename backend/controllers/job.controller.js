@@ -68,17 +68,9 @@ export const postJob = async (req, res) => {
             experienceLevel: parsedExperienceLevel,
             position: parsedPosition,
             company: companyId,
-<<<<<<< Updated upstream
-            userId: authenticatedUserId
-        });
-
-        const populatedJob = await job.populate("company", "name location");
-
-=======
             userId
         });
 
->>>>>>> Stashed changes
 
         return res.status(201).json({
             message: "New job created successfully.",
@@ -107,10 +99,6 @@ export const getAllJobs = async (req, res) => {
         };
         const jobs = await Job.find(query)
             .populate("company", "name location");
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 
         console.log('Jobs fetched:', jobs);
@@ -131,11 +119,6 @@ export const getJobById = async (req, res) => {
         const job = await Job.findById(req.params.id)
             .populate("company", "name location")   // only fetch needed fields
             .populate("applications");  // optional
-<<<<<<< Updated upstream
-        
-=======
-
->>>>>>> Stashed changes
         if (!job) {
             return res.status(404).json({
                 message: "Job not found.",
@@ -178,8 +161,3 @@ export const getAdminJobs = async (req, res) => {
     }
 };
 
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
