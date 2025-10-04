@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
@@ -23,7 +23,7 @@ const Login = () => {
         role: "",
     });
 
-    const { loading } = useSelector(store => store.auth)
+    const { loading, user } = useSelector(store => store.auth)
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -58,9 +58,15 @@ const Login = () => {
         }
     }
 
+     useEffect(()=>{
+        if(user){
+            navigate("/");
+        }
+    },[])
+
     return (
         <div>
-            <Navbar />z
+            <Navbar />
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
                 <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10'>
                     <h1 className='font-bold text-xl mb-5'>Login</h1>
