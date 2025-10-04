@@ -16,6 +16,7 @@ import Applicants from './components/admin/Applicants'
 import Login from './components/auth/Login'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
+
 const appRouter = createBrowserRouter([
   {
     path: '/',
@@ -45,6 +46,7 @@ const appRouter = createBrowserRouter([
     path: '/profile',
     element: <Profile />
   },
+  
 
   // admin logic
   {

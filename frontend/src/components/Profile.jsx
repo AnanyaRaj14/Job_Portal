@@ -10,7 +10,6 @@ import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
 
-// const skills = ["html", "css", "Js", "reactJs", "MongoDB", "ExpressJs", "NodeJs"];
 const isResume = true;
 
 const Profile = () => {
@@ -19,57 +18,68 @@ const Profile = () => {
     const { user } = useSelector(store => store.auth);
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
             <Navbar />
 
-            <div className='max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-8'>
-                <div className='flex justify-between'>
+            {/* Profile Card */}
+            <div className='max-w-4xl mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl my-5 p-6 sm:p-8 transition-colors duration-300'>
+                <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6'>
                     <div className='flex items-center gap-4'>
                         <Avatar className="h-24 w-24">
-                            <AvatarImage src="https://s3.amazonaws.com/cdn.designcrowd.com/blog/40-Brand-Logos-for-Creative-and-Cool-Companies/orange-electronics-company-by-ions-brandcrowd.png" alt="profile">
-                            </AvatarImage>
+                            <AvatarImage src="https://s3.amazonaws.com/cdn.designcrowd.com/blog/40-Brand-Logos-for-Creative-and-Cool-Companies/orange-electronics-company-by-ions-brandcrowd.png" alt="profile" />
                         </Avatar>
                         <div>
-                            <h1 className='font-medium text-xl'>{user?.fullname}</h1>
-                            <p>{user?.profile?.bio}</p>
+                            <h1 className='font-medium text-xl sm:text-2xl text-gray-900 dark:text-gray-100'>{user?.fullname}</h1>
+                            <p className='text-gray-600 dark:text-gray-300 mt-1'>{user?.profile?.bio}</p>
                         </div>
                     </div>
                     <Button
                         onClick={() => setOpen(true)}
-                        className='text-right'
-                        variant='outline'><Pen /></Button>
+                        className='self-end sm:self-auto'
+                        variant='outline'>
+                        <Pen />
+                    </Button>
                 </div>
-                <div className='my-5'>
-                    <div className='flex items-center gap-3 my-2'>
-                        <Mail className='h-4 w-4' />
-                        <span>{user?.email}</span>
+
+                {/* Contact Info */}
+                <div className='my-5 flex flex-col sm:flex-row sm:items-center sm:gap-6 gap-2'>
+                    <div className='flex items-center gap-2'>
+                        <Mail className='h-4 w-4 text-gray-600 dark:text-gray-300' />
+                        <span className='text-gray-700 dark:text-gray-200'>{user?.email}</span>
                     </div>
-                    <div className='flex items-center gap-3 my-2'>
-                        <Contact className='h-4 w-4' />
-                        <span>{user?.phoneNumber}</span>
+                    <div className='flex items-center gap-2'>
+                        <Contact className='h-4 w-4 text-gray-600 dark:text-gray-300' />
+                        <span className='text-gray-700 dark:text-gray-200'>{user?.phoneNumber}</span>
                     </div>
                 </div>
+
+                {/* Skills */}
                 <div className='my-5'>
-                    <h1>Skills</h1>
-                    <div className='flex items-center gap-1'>
-                        {
-                            user?.profile?.skills.length != 0 ? user?.profile?.skills.map((item, index) => <Badge key={index} >{item}</Badge>) : <span>NA</span>
+                    <h1 className='font-semibold text-gray-800 dark:text-gray-200 mb-2'>Skills</h1>
+                    <div className='flex flex-wrap items-center gap-2'>
+                        {user?.profile?.skills.length !== 0 
+                            ? user?.profile?.skills.map((item, index) => <Badge key={index} className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100">{item}</Badge>)
+                            : <span className='text-gray-500 dark:text-gray-400'>NA</span>
                         }
                     </div>
                 </div>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label className="text-md font-bold">Resume</Label>
-                    {
-                        isResume ? <a target='_blank' href={user?.profile?.resume} className='text-blue-600 w-full hover:underline cursor-pointer'>{user?.profile?.resumeOriginalName}</a> : <span>NA</span>
-                    }
 
+                {/* Resume */}
+                <div className="grid w-full max-w-sm items-start gap-1.5">
+                    <Label className="text-md font-bold text-gray-800 dark:text-gray-200">Resume</Label>
+                    {isResume 
+                        ? <a target='_blank' rel="noreferrer" href={user?.profile?.resume} className='text-blue-600 dark:text-blue-400 hover:underline cursor-pointer truncate'>{user?.profile?.resumeOriginalName}</a>
+                        : <span className='text-gray-500 dark:text-gray-400'>NA</span>
+                    }
                 </div>
             </div>
-            <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
-                <h1 className='text-xl font-bold p-5'>Applied Jobs</h1>
-                {/*  Total No. of Application Table */}
+
+            {/* Applied Jobs */}
+            <div className='max-w-4xl mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl mt-6 transition-colors duration-300'>
+                <h1 className='text-xl sm:text-2xl font-bold p-5 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700'>Applied Jobs</h1>
                 <AppliedJobTable />
             </div>
+
             <UpdateProfileDialog open={open} setOpen={setOpen} />
         </div>
     )
