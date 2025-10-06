@@ -14,6 +14,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useSelector(store => store.auth);
+    console.log('user token ', user?.token);
     const [input, setInput] = useState({
         fullname: user?.fullname,
         email: user?.email,
@@ -44,6 +45,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         formData.append("phoneNumber", input.phoneNumber);
         formData.append("bio", input.bio);
         formData.append("skills", input.skills);
+        formData.append("token", user?.token);
         if (input.file) {
             formData.append("file", input.file);
         }
