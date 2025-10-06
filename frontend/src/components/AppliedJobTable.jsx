@@ -39,7 +39,7 @@ const AppliedJobTable = () => {
         </TableHeader>
 
         <TableBody>
-          {allAppliedJobs.length <= 0 ? (
+          {allAppliedJobs?.length <= 0 ? (
             <TableRow>
               <TableCell
                 colSpan={4}
@@ -49,14 +49,13 @@ const AppliedJobTable = () => {
               </TableCell>
             </TableRow>
           ) : (
-            allAppliedJobs.map((appliedJob, index) => (
+            allAppliedJobs?.map((appliedJob, index) => (
               <TableRow
                 key={appliedJob._id}
-                className={`transition-colors duration-200 ${
-                  index % 2 === 0
+                className={`transition-colors duration-200 ${index % 2 === 0
                     ? 'bg-white dark:bg-gray-800'
                     : 'bg-gray-50 dark:bg-gray-900'
-                } hover:bg-[#6A38C2]/5 dark:hover:bg-[#6A38C2]/20`}
+                  } hover:bg-[#6A38C2]/5 dark:hover:bg-[#6A38C2]/20`}
               >
                 <TableCell className="text-gray-800 dark:text-gray-200">
                   {appliedJob?.createdAt?.split('T')[0]}
@@ -69,13 +68,12 @@ const AppliedJobTable = () => {
                 </TableCell>
                 <TableCell className="text-right">
                   <Badge
-                    className={`text-white font-semibold px-3 py-1 rounded-full ${
-                      appliedJob?.status === 'rejected'
+                    className={`text-white font-semibold px-3 py-1 rounded-full ${appliedJob?.status === 'rejected'
                         ? 'bg-red-500'
                         : appliedJob.status === 'pending'
-                        ? 'bg-gray-500'
-                        : 'bg-green-500'
-                    }`}
+                          ? 'bg-gray-500'
+                          : 'bg-green-500'
+                      }`}
                   >
                     {appliedJob.status.toUpperCase()}
                   </Badge>

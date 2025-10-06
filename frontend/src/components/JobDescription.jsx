@@ -7,26 +7,49 @@ import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from '@/utils/constant';
 import { setSingleJob } from '@/redux/jobSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
+import { useCookies } from 'react-cookie';
 
 const JobDescription = () => {
 
     const { singleJob } = useSelector(store => store.job);
     const { user } = useSelector(store => store.auth);
 
-    const isInitiallyApplied = singleJob?.applications?.some(application=>application.applicant==user?._id) || false
+    const isInitiallyApplied = singleJob?.applications?.some(application => application.applicant == user?._id) || false
     const [isApplied, setIsApplied] = useState(isInitiallyApplied);
-    
+    const [selectedJob, setSelectedJob] = useState(null)
+    const [tokenData, setTokenData] = useState('')
+
     const params = useParams();
     const jobId = params.id;
     const dispatch = useDispatch();
+    const [cookies, setCookie] = useCookies();
+    // console.log('cookies', cookies.token);
+
+    useEffect(() => {
+        const fetchSingleJob = async () => {
+            setTokenData(cookies.token)
+            try {
+                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, { withCredentials: true });
+                console.log(res.data);
+                setSelectedJob(res.data.job._id)
+                if (res.data.success) {
+                    dispatch(setSingleJob(res.data.job));
+                    setIsApplied(res.data.job.applications.some(application => application.applicant == user?._id))
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchSingleJob();
+    }, [jobId, dispatch, user?._id]);
 
     const applyJobHandler = async () => {
         try {
-            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {withCredentials:true});
-            if(res.data.success){
+            const res = await axios.post(`${APPLICATION_API_END_POINT}/apply/${jobId}`, { userId: user?._id, jobId: selectedJob, token: tokenData });
+            if (res.data.success) {
                 setIsApplied(true);
-                const updatedSingleJob = {...singleJob, applications:[...singleJob.applications,{applicant:user?._id}]}
-                dispatch(setSingleJob(updatedSingleJob)); 
+                const updatedSingleJob = { ...singleJob, applications: [...singleJob.applications, { applicant: user?._id }] }
+                dispatch(setSingleJob(updatedSingleJob));
                 toast.success(res.data.message);
             }
         } catch (error) {
@@ -35,20 +58,7 @@ const JobDescription = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchSingleJob = async () => {
-            try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, { withCredentials: true });
-                if (res.data.success) {
-                    dispatch(setSingleJob(res.data.job));
-                    setIsApplied(res.data.job.applications.some(application=>application.applicant == user?._id))
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchSingleJob();
-    }, [jobId, dispatch, user?._id]);
+
 
     return (
         <div className='max-w-7xl mx-auto my-10 px-4 sm:px-6 lg:px-8'>

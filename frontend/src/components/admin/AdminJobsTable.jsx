@@ -13,6 +13,7 @@ const AdminJobsTable = ({ filterText }) => {
         job.title?.toLowerCase().includes(filterText.toLowerCase()) ||
         job.company?.name?.toLowerCase().includes(filterText.toLowerCase())
     );
+    console.log('filteredJobs', allAdminJobs);
 
     return (
         <div className="overflow-x-auto rounded-lg shadow-md bg-white dark:bg-gray-800 transition-colors duration-300">

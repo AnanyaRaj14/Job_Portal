@@ -16,6 +16,7 @@ const Profile = () => {
     useGetAppliedJobs()
     const [open, setOpen] = useState(false);
     const { user } = useSelector(store => store.auth);
+    console.log('user', user);
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -26,7 +27,7 @@ const Profile = () => {
                 <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6'>
                     <div className='flex items-center gap-4'>
                         <Avatar className="h-24 w-24">
-                            <AvatarImage src="https://s3.amazonaws.com/cdn.designcrowd.com/blog/40-Brand-Logos-for-Creative-and-Cool-Companies/orange-electronics-company-by-ions-brandcrowd.png" alt="profile" />
+                            <AvatarImage src={user?.profile?.profilePhoto} alt="profile" />
                         </Avatar>
                         <div>
                             <h1 className='font-medium text-xl sm:text-2xl text-gray-900 dark:text-gray-100'>{user?.fullname}</h1>

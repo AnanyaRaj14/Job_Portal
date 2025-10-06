@@ -17,6 +17,7 @@ function Navbar() {
 
     const [darkMode, setDarkMode] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
