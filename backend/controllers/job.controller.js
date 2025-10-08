@@ -113,7 +113,7 @@ export const getAllJobs = async (req, res) => {
 >>>>>>> Stashed changes
 
 
-        console.log('Jobs fetched:', jobs);
+        // console.log('Jobs fetched:', jobs);
         return res.status(200).json({ jobs, success: true });
     } catch (error) {
         console.error(error);
